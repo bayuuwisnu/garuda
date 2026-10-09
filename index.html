@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Garuda Sustainable Sandbox</title>
+<style>
+:root{
+ --navy:#0c2a55;--navy2:#16407e;--gold:#d8ab3e;--gold2:#f3cf7a;--coral:#f3794c;--pink:#d6487e;--teal:#2f8fc9;
+ --bg:#f3f6fb;--card:#fff;--text:#182233;--muted:#5c6779;--border:#e2e8f3;
+ --ok:#1f9d55;--warn:#b9790f;--fail:#d6334c;--proc:#2f8fc9;
+ --grad:linear-gradient(90deg,var(--coral),var(--pink),var(--teal));
+}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){--bg:#0b1726;--card:#122036;--text:#eef2f9;--muted:#9fb0c7;--border:#223253;--navy:#0c2240;--navy2:#1b4a8f;}
+}
+:root[data-theme="dark"]{--bg:#0b1726;--card:#122036;--text:#eef2f9;--muted:#9fb0c7;--border:#223253;--navy:#0c2240;--navy2:#1b4a8f;}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+abbr{cursor:help;text-decoration:none;border-bottom:1px dotted var(--muted)}
+header{position:sticky;top:0;z-index:5;background:var(--navy);background-image:var(--grad);background-size:100% 3px;background-repeat:no-repeat;background-position:bottom;color:#fff;
+ padding:calc(10px + env(safe-area-inset-top,0px)) calc(14px + env(safe-area-inset-right,0px)) 0 calc(14px + env(safe-area-inset-left,0px))}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;gap:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700}
+.coin{width:32px;height:32px;flex:0 0 32px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--gold2),var(--gold) 60%,#a9791e);display:flex;align-items:center;justify-content:center;font-weight:800;color:#5a3d0a;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.role-badge{font-size:12px;background:rgba(255,255,255,.15);padding:5px 10px;border-radius:20px;white-space:nowrap}
+.role-badge a{color:#fff;text-decoration:underline;margin-left:6px}
+.hdr-banner{font-size:11px;background:rgba(255,255,255,.12);padding:5px 8px;border-radius:6px;margin-bottom:10px;text-align:center}
+main{max-width:760px;margin:0 auto;padding:18px;padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+h1{font-size:20px;margin:0 0 8px}
+h2{font-size:17px;margin:0 0 10px;color:var(--navy2)}
+p.muted,.muted{color:var(--muted)}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--gold);color:#4a330a;margin-bottom:10px}
+.btn{background:var(--navy2);color:#fff;border:none;padding:10px 16px;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px}
+.btn.secondary{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn.gold{background:linear-gradient(90deg,var(--gold),var(--gold2));color:#4a330a}
+.grid{display:grid;gap:12px}
+.cols2{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.role-card{border:1px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;background:var(--card)}
+.role-card:hover,.role-card:focus{border-color:var(--teal);outline:none}
+.role-card h3{margin:0 0 4px;font-size:15px}
+.metric{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}
+.metric:last-child{border:none}
+label{display:block;font-size:13px;font-weight:600;margin:10px 0 4px}
+input,select,textarea{width:100%;padding:9px 10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:14px;font-family:inherit}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--border);white-space:nowrap}
+.status{font-weight:700;font-size:12px}
+.status.ok{color:var(--ok)}.status.warn{color:var(--warn)}.status.fail{color:var(--fail)}.status.proc{color:var(--proc)}
+.scroll-x{overflow-x:auto}
+.note{font-size:12px;color:var(--muted);background:var(--bg);border:1px dashed var(--border);padding:8px 10px;border-radius:8px;margin-top:10px}
+#bottomnav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);display:flex;overflow-x:auto;
+ padding:4px calc(4px + env(safe-area-inset-right,0px)) calc(4px + env(safe-area-inset-bottom,0px)) calc(4px + env(safe-area-inset-left,0px));z-index:5}
+#bottomnav button{flex:1;min-width:66px;background:none;border:none;color:var(--muted);font-size:10.5px;padding:7px 2px;cursor:pointer;border-radius:8px;font-family:inherit}
+#bottomnav button.active{color:var(--navy2);font-weight:700;background:var(--bg)}
+</style>
+</head>
+<body>
+<header>
+ <div class="hdr-top">
+  <div class="brand"><span class="coin">Rp</span> Garuda Sandbox</div>
+  <div class="role-badge" id="roleBadge">Mode Simulasi</div>
+ </div>
+ <div class="hdr-banner">⚠️ SIMULASI — DATA FIKTIF. Bukan aplikasi resmi Bank Indonesia / sistem Rupiah Digital sesungguhnya.</div>
+</header>
+<main id="main"></main>
+<nav id="bottomnav"></nav>
+<script>
+const roles=[
+{id:'otoritas',name:'Otoritas Penerbit',short:'Otoritas',icon:'🏛️',desc:'Mengelola penerbitan & pemusnahan Rupiah Digital wholesale serta memantau uang beredar.',menu:['dashboard','issue','burn','audit','sustain','feedback']},
+{id:'bankA',name:'Peserta – Bank A',short:'Bank A',icon:'🏦',desc:'Melakukan transfer antarpeserta, memantau saldo & status transaksi simulasi.',menu:['dashboard','transfer','status','audit','sustain','feedback']},
+{id:'bankB',name:'Peserta – Bank B',short:'Bank B',icon:'🏦',desc:'Melakukan transfer antarpeserta, memantau saldo & status transaksi simulasi.',menu:['dashboard','transfer','status','audit','sustain','feedback']},
+{id:'operator',name:'Operator Teknologi',short:'Operator',icon:'🖥️',desc:'Memantau status sistem, aktivitas transaksi, dan menangani skenario gangguan.',menu:['dashboard','status','audit','sustain','feedback']},
+{id:'auditor',name:'Auditor/Pengawas',short:'Auditor',icon:'🔍',desc:'Meninjau jejak audit transaksi untuk kepatuhan & akuntabilitas.',menu:['dashboard','audit','sustain','feedback']}
+];
+const icons={dashboard:'🏠',issue:'🪙',transfer:'🔁',status:'📶',burn:'🔥',audit:'🧾',sustain:'🌱',feedback:'💬'};
+const labels={dashboard:'Dasbor',issue:'Penerbitan',transfer:'Transfer',status:'Status',burn:'Pemusnahan',audit:'Audit',sustain:'Sustain',feedback:'Feedback'};
+let state={role:null,screen:'start',balance:25000000000,circulating:184500000000,txSeq:1032,
+ tx:[
+ {id:'TX-1029',type:'Penerbitan',from:'Otoritas',to:'Bank A',amount:5000000000,status:'ok',note:'Penerbitan awal simulasi'},
+ {id:'TX-1030',type:'Transfer',from:'Bank A',to:'Bank B',amount:1250000000,status:'ok',note:'Transfer antarpeserta'},
+ {id:'TX-1031',type:'Transfer',from:'Bank B',to:'Bank A',amount:300000000,status:'warn',note:'Menunggu validasi jaringan simulasi'}
+ ],
+ audit:[
+ {time:'10:05',role:'Operator Teknologi',action:'Transfer',detail:'Bank B → Bank A: Rp300.000.000 (Menunggu validasi jaringan simulasi)'},
+ {time:'09:40',role:'Peserta – Bank A',action:'Transfer',detail:'Bank A → Bank B: Rp1.250.000.000 (Transfer antarpeserta)'},
+ {time:'08:12',role:'Otoritas Penerbit',action:'Penerbitan',detail:'Otoritas → Bank A: Rp5.000.000.000 (Penerbitan awal simulasi)'}
+ ]};
+let lastIssue='',lastTransfer='',lastBurn='',lastFeedback='';
+function fmt(n){return 'Rp'+n.toLocaleString('id-ID')}
+function nowTime(){const d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
+function statusIcon(s){return {ok:'✅',warn:'⏳',fail:'❌',proc:'🔄'}[s]}
+function statusLabel(s){return {ok:'Selesai',warn:'Tertunda',fail:'Gagal',proc:'Diproses'}[s]}
+function logAudit(action,detail){state.audit.unshift({time:nowTime(),role:state.role?state.role.name:'-',action,detail})}
+function addTx(type,from,to,amount,status,note){const id='TX-'+(state.txSeq++);state.tx.unshift({id,type,from,to,amount,status,note});logAudit(type,from+' → '+to+': '+fmt(amount)+' ('+note+')');return id}
+function go(scr){lastIssue=lastTransfer=lastBurn=lastFeedback='';state.screen=scr;render()}
+function selectRole(id){state.role=roles.find(r=>r.id===id);logAudit('Pemilihan Peran','Masuk sebagai '+state.role.name);go('dashboard')}
+function changeRole(){state.role=null;go('role')}
+function resolveTx(id,ns){const t=state.tx.find(t=>t.id===id);t.status=ns;t.note=ns==='ok'?'Diselesaikan ulang setelah peninjauan':'Dibatalkan oleh pengguna';logAudit('Penanganan Gangguan',id+' → '+statusLabel(ns));render()}
+function submitIssue(e){e.preventDefault();const to=document.getElementById('issTo').value;const amt=Number(document.getElementById('issAmt').value)||0;const ref=document.getElementById('issRef').value||'-';state.balance+=amt;state.circulating+=amt;const id=addTx('Penerbitan','Otoritas',to,amt,'ok',ref);lastIssue='<div class="card"><h2>✅ Penerbitan Berhasil</h2><p>'+id+' — '+fmt(amt)+' diterbitkan ke '+to+'.</p><p class="muted">Diajukan ✓ → Ditinjau ✓ → Diotorisasi ✓ → Selesai ✓</p></div>';render();return false}
+function submitTransfer(e){e.preventDefault();const to=document.getElementById('trTo').value;const amt=Number(document.getElementById('trAmt').value)||0;const scn=document.getElementById('trScn').value;const status=scn==='disrupt'?'warn':'ok';const note=scn==='disrupt'?'Validasi jaringan simulasi tertunda':'Divalidasi & diselesaikan';const id=addTx('Transfer',state.role.short,to,amt,status,note);lastTransfer=status==='ok'?'<div class="card"><h2>✅ Transfer Selesai</h2><p>'+id+' — '+fmt(amt)+' ke '+to+'.</p></div>':'<div class="card"><h2>⏳ Transfer Tertunda</h2><p>'+id+' — '+fmt(amt)+' ke '+to+'. '+note+'. Kelola di layar <b>Status</b>.</p></div>';render();return false}
+function submitBurn(e){e.preventDefault();const amt=Number(document.getElementById('brAmt').value)||0;const reason=document.getElementById('brReason').value;state.circulating-=amt;state.balance-=amt;const id=addTx('Pemusnahan','Otoritas','—',amt,'ok',reason);lastBurn='<div class="card"><h2>✅ Pemusnahan Selesai</h2><p>'+id+' — '+fmt(amt)+' dimusnahkan ('+reason+'). Uang beredar kini '+fmt(state.circulating)+'.</p></div>';render();return false}
+function submitFeedback(e){e.preventDefault();const ease=document.getElementById('fbEase').value;const rel=document.getElementById('fbRel').value;const conf=document.getElementById('fbConfuse').value||'-';const sec=document.getElementById('fbSec').value||'-';const sugg=document.getElementById('fbSugg').value||'-';lastFeedback='<div class="card"><h2>✅ Terima Kasih</h2><p>Skor kemudahan: '+ease+'/5 • Relevansi skenario: '+rel+'/5</p><p class="muted">Membingungkan: '+conf+'<br>Kekhawatiran keamanan: '+sec+'<br>Saran: '+sugg+'</p><div class="note">Umpan balik simulasi ini hanya tersimpan sementara di perangkat Anda dan tidak dikirim ke server mana pun.</div></div>';render();return false}
+const screens={
+start:()=>'<div class="card"><span class="tag">Studi Kasus: Proyek Garuda</span><h1>🦅 Garuda Sustainable Sandbox</h1><p class="muted">Media eksplorasi <abbr title="Wholesale: transaksi antarlembaga keuangan, bukan ritel masyarakat umum">wholesale</abbr> Rupiah Digital berbasis Design Thinking & prinsip keberlanjutan — mensimulasikan penerbitan, transfer, dan pemusnahan pada <abbr title="Ledger: buku besar digital pencatat saldo & transaksi">cash ledger</abbr> Bank Indonesia.</p><p>Prototipe edukatif berdasarkan Proof of Concept Proyek Garuda (Bank Indonesia). Tidak terhubung ke sistem atau data produksi apa pun — seluruh saldo, identitas, dan transaksi bersifat fiktif.</p><button class="btn gold" onclick="go(\'role\')">Mulai Simulasi →</button></div><div class="card"><h2>Glosarium Singkat</h2><div class="metric"><span><b>DLT</b></span><span class="muted">Distributed Ledger Technology</span></div><div class="metric"><span><b>Settlement Finality</b></span><span class="muted">Status transaksi final, tak dapat dibatalkan</span></div><div class="metric"><span><b>Wholesale</b></span><span class="muted">Antarlembaga keuangan, bukan ritel</span></div><div class="metric"><span><b>Ledger</b></span><span class="muted">Buku besar digital transaksi</span></div></div>',
+role:()=>'<div class="card"><h2>Pilih Peran Anda</h2><p class="muted">Setiap peran memiliki hak akses & tampilan berbeda.</p><div class="grid cols2">'+roles.map(r=>'<div class="role-card" tabindex="0" onclick="selectRole(\''+r.id+'\')" onkeypress="if(event.key===\'Enter\')selectRole(\''+r.id+'\')"><h3>'+r.icon+' '+r.name+'</h3><p class="muted" style="font-size:13px">'+r.desc+'</p></div>').join('')+'</div></div>',
+dashboard:()=>{const c=state.tx.filter(t=>t.status==='ok').length,p=state.tx.filter(t=>t.status==='warn').length,f=state.tx.filter(t=>t.status==='fail').length;
+ return '<div class="card"><h2>🏠 Dasbor Utama — '+state.role.name+'</h2><div class="metric"><span>Saldo Simulasi</span><b>'+fmt(state.balance)+'</b></div><div class="metric"><span>Rupiah Digital Beredar</span><b>'+fmt(state.circulating)+'</b></div><div class="metric"><span>Total Transaksi</span><b>'+state.tx.length+'</b></div><div class="metric"><span>✅ Selesai</span><b>'+c+'</b></div><div class="metric"><span>⏳ Tertunda</span><b>'+p+'</b></div><div class="metric"><span>❌ Gagal</span><b>'+f+'</b></div></div><div class="grid cols2">'+state.role.menu.filter(m=>m!=='dashboard').map(m=>'<div class="role-card" onclick="go(\''+m+'\')"><h3>'+icons[m]+' '+labels[m]+'</h3></div>').join('')+'</div>'},
+issue:()=>'<div class="card"><h2>🪙 Penerbitan Wholesale Rupiah Digital</h2><form onsubmit="return submitIssue(event)"><label>Peserta Penerima</label><select id="issTo"><option>Bank A</option><option>Bank B</option></select><label>Nilai (Rp)</label><input id="issAmt" type="number" min="1" required placeholder="cth. 1000000000"><label>Referensi</label><input id="issRef" type="text" placeholder="cth. REF-001"><button class="btn" style="margin-top:14px" type="submit">Tinjau & Otorisasi</button></form><div class="note">Proses: Diajukan → Ditinjau → Diotorisasi → Selesai (disimulasikan seketika untuk validasi konsep).</div></div>'+lastIssue,
+transfer:()=>'<div class="card"><h2>🔁 Transfer Antarpeserta</h2><form onsubmit="return submitTransfer(event)"><label>Dari</label><input value="'+state.role.short+'" disabled><label>Ke</label><select id="trTo">'+roles.filter(r=>r.id!=='otoritas'&&r.id!==state.role.id).map(r=>'<option>'+r.short+'</option>').join('')+'</select><label>Nilai (Rp)</label><input id="trAmt" type="number" min="1" required placeholder="cth. 250000000"><label>Skenario</label><select id="trScn"><option value="normal">Normal</option><option value="disrupt">Gangguan (simulasi)</option></select><button class="btn" style="margin-top:14px" type="submit">Kirim Transfer</button></form></div>'+lastTransfer,
+status:()=>'<div class="card"><h2>📶 Status Transaksi</h2><div class="scroll-x"><table><tr><th>ID</th><th>Jenis</th><th>Dari→Ke</th><th>Nilai</th><th>Status</th><th>Aksi</th></tr>'+state.tx.map(t=>'<tr><td>'+t.id+'</td><td>'+t.type+'</td><td>'+t.from+'→'+t.to+'</td><td>'+fmt(t.amount)+'</td><td><span class="status '+t.status+'">'+statusIcon(t.status)+' '+statusLabel(t.status)+'</span></td><td>'+(t.status==='warn'?'<button class="btn secondary" style="padding:4px 8px;font-size:11px" onclick="resolveTx(\''+t.id+'\',\'ok\')">Coba Lagi</button> <button class="btn secondary" style="padding:4px 8px;font-size:11px" onclick="resolveTx(\''+t.id+'\',\'fail\')">Batalkan</button>':'—')+'</td></tr>').join('')+'</table></div></div>',
+burn:()=>'<div class="card"><h2>🔥 Pemusnahan (Redemption)</h2><form onsubmit="return submitBurn(event)"><label>Nilai Dimusnahkan (Rp)</label><input id="brAmt" type="number" min="1" required placeholder="cth. 500000000"><label>Alasan</label><select id="brReason"><option>Permintaan peserta</option><option>Penyesuaian kebijakan</option><option>Koreksi kesalahan input</option></select><button class="btn" style="margin-top:14px" type="submit">Otorisasi Pemusnahan</button></form></div>'+lastBurn,
+audit:()=>'<div class="card"><h2>🧾 Audit Trail</h2><div class="scroll-x"><table><tr><th>Waktu</th><th>Peran</th><th>Aktivitas</th><th>Detail</th></tr>'+state.audit.map(a=>'<tr><td>'+a.time+'</td><td>'+a.role+'</td><td>'+a.action+'</td><td>'+a.detail+'</td></tr>').join('')+'</table></div></div>',
+sustain:()=>'<div class="card"><h2>🌱 Sustainability Dashboard</h2><div class="metric"><span>Efisiensi Langkah Proses</span><b>6 langkah (vs ±14 manual, simulasi)</b></div><div class="metric"><span>Waktu Rata-rata Transfer</span><b>≈2m10d (target ≤3 menit)</b></div><div class="metric"><span>Dokumen Fisik Dihindari</span><b>100% (data fiktif)</b></div><div class="metric"><span>Arsitektur</span><b>Ringan — tanpa infrastruktur produksi</b></div><div class="metric"><span>Mode Aksesibilitas</span><b>Navigasi keyboard & label teks tersedia</b></div><div class="note">⚠️ Indikator energi & karbon: <b>belum diukur</b> — metodologi pengukuran belum ditetapkan.</div></div>',
+feedback:()=>'<div class="card"><h2>💬 Umpan Balik Pengujian</h2><form onsubmit="return submitFeedback(event)"><label>Kemudahan Penggunaan (1–5)</label><select id="fbEase"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select><label>Hal yang Membingungkan</label><input id="fbConfuse" type="text" placeholder="cth. istilah settlement finality"><label>Relevansi Skenario Wholesale (1–5)</label><select id="fbRel"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select><label>Kekhawatiran Keamanan/Privasi</label><input id="fbSec" type="text" placeholder="cth. kejelasan label data fiktif"><label>Saran Perbaikan</label><textarea id="fbSugg" rows="3"></textarea><button class="btn" style="margin-top:14px" type="submit">Kirim Umpan Balik</button></form></div>'+lastFeedback
+};
+function render(){
+ document.getElementById('roleBadge').innerHTML=state.role?(state.role.name+' <a href="#" onclick="changeRole();return false;">Ganti</a>'):'Mode Simulasi';
+ document.getElementById('main').innerHTML=(screens[state.screen]||screens.start)();
+ const nav=document.getElementById('bottomnav');
+ nav.innerHTML=state.role?state.role.menu.map(id=>'<button class="'+(state.screen===id?'active':'')+'" onclick="go(\''+id+'\')">'+icons[id]+'<br>'+labels[id]+'</button>').join(''):'';
+}
+render();
+</script>
+</body>
+</html>
